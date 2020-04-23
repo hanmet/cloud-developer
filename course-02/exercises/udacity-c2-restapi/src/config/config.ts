@@ -1,9 +1,9 @@
 export const config = {
   "dev": {
     "username": "postgres",
-    "password": "CloudDeveloper",
+    "password": process.env.POSTGRESS_PASSWORD,
     "database": "cloud-developer",
-    "host": "database-1.cgimfj6iurgb.eu-central-1.rds.amazonaws.com",
+    "host": process.env.POSTGRESS_HOST,
     "dialect": "postgres",
     "aws_region": "eu-central-1",
     "aws_profile": "udacity",
@@ -15,5 +15,8 @@ export const config = {
     "database": "udagram_prod",
     "host": "",
     "dialect": "postgres"
+  },
+  "jwt": {
+    "secret": process.env.JWT_SECRET
   }
 };
