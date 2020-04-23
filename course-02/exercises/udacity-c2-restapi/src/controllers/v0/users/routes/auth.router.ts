@@ -25,7 +25,7 @@ async function comparePasswords(plainTextPassword: string, hash: string): Promis
 
 function generateJWT(user: User): string {
     //@TODO Use jwt to create a new JWT Payload containing
-    return jwt.sign(user, config.jwt.secret);
+    return jwt.sign(user.toJSON(), config.jwt.secret);
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -92,6 +92,9 @@ router.post('/login', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
     const email = req.body.email;
     const plainTextPassword = req.body.password;
+
+    console.log(`About to register new user with email: ${email}`);
+
     // check email is valid
     if (!email || !EmailValidator.validate(email)) {
         return res.status(400).send({ auth: false, message: 'Email is required or malformed' });
@@ -105,7 +108,8 @@ router.post('/', async (req: Request, res: Response) => {
     // find the user
     const user = await User.findByPk(email);
     // check that user doesnt exists
-    if(user) {
+    if(user != null) {
+        console.log("user already exist in db");
         return res.status(422).send({ auth: false, message: 'User may already exist' });
     }
 
@@ -120,6 +124,7 @@ router.post('/', async (req: Request, res: Response) => {
     try {
         savedUser = await newUser.save();
     } catch (e) {
+        console.log(`An error occured while trying to save user: ${newUser}`);
         throw e;
     }
 
