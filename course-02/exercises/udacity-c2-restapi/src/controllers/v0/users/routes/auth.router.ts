@@ -108,7 +108,7 @@ router.post('/', async (req: Request, res: Response) => {
     // find the user
     const user = await User.findByPk(email);
     // check that user doesnt exists
-    if(user != null) {
+    if(!!user) {
         console.log("user already exist in db");
         return res.status(422).send({ auth: false, message: 'User may already exist' });
     }
