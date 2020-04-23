@@ -39,31 +39,31 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
         return true;
     }
 
-    app.get("/filteredimage", async (req, res) => {
+    app.get('/filteredimage', async (req, res) => {
         const image_url = req.query.image_url;
 
         console.log(`Received request with image_url: ${image_url}`);
 
         if (!isValidUrl(image_url)) {
-            res.status(400).send("invalid image url");
-        } else {
-            const path = await filterImageFromURL(image_url);
-            console.log(path);
-
-            res.status(200)
-                .sendFile(path, () => {
-                    deleteLocalFiles([path]);
-                });
+            res.status(400).send('invalid image url');
         }
-        return res;
+
+        const path = await filterImageFromURL(image_url);
+        console.log(path);
+
+        return res.status(200)
+            .sendFile(path, () => {
+                deleteLocalFiles([path]);
+            });
+
     });
 
     //! END @TODO1
 
     // Root Endpoint
     // Displays a simple message to the user
-    app.get("/", async (req, res) => {
-        res.send("try GET /filteredimage?image_url={{}}")
+    app.get('/', async (req, res) => {
+        res.send('try GET /filteredimage?image_url={{}}');
     });
 
 
